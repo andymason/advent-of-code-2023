@@ -3,43 +3,43 @@ import { join } from "https://deno.land/std@0.207.0/path/mod.ts";
 function getNumberAsInteger(inputNumber: string): number {
   const numberAsInt: number = parseInt(inputNumber, 10);
 
-  if (Number.isNaN(numberAsInt)) {
-    throw new Error(`Invalid input: inputNumber must be an ascii number string. ${inputNumber}`);
-  }
-
-  return numberAsInt;
+  return Number.isNaN(numberAsInt) ? 0 : numberAsInt;
 }
 
-// Use named capturing groups to get the first and optional last digit
-const firstAndLastDigitPattern = /(?<firstNumber>\d).*(?<=(?<lastNumber>\d))/i;
+function processRow(row: string): number {
+  const cleanedRowData = row.trim();
+  if (cleanedRowData.length === 0) {
+    return 0;
+  }
 
-try {
+  const numbersInRow = cleanedRowData.match(/\d/g);
+  if (!numbersInRow) {
+    throw new Error(`Invalid row: No number found in string. ${row}`);
+  }
+
+  const intNumbersInRow = numbersInRow.map(getNumberAsInteger);
+  const firstNumber = intNumbersInRow[0];
+  const lastNumber = intNumbersInRow[intNumbersInRow.length - 1];
+
+  return (firstNumber * 10) + lastNumber;
+}
+
+function main(): void {
   const filePath = join("day1", "day1-data.txt");
-  const fileData = await Deno.readTextFile(filePath);
+  const fileData = Deno.readTextFileSync(filePath);
   const dataRows = fileData.split(/\n|\r/);
 
   let sumTotal = 0;
 
   for (const row of dataRows) {
-    const cleanedRowData = row.trim();
-    if (cleanedRowData.length === 0) {
-      continue;
-    }
-
-    const allNumbersInRow = firstAndLastDigitPattern.exec(row);
-    const { firstNumber, lastNumber } = allNumbersInRow?.groups ?? {};
-
-    if (!firstNumber) {
-      throw new Error(`Invalid row: No number found in string. ${row}`);
-    }
-
-    const firstNumberAsInt = getNumberAsInteger(firstNumber);
-    const lastNumberAsInt = lastNumber ? getNumberAsInteger(lastNumber) : firstNumberAsInt;
-
-    sumTotal += (firstNumberAsInt * 10) + lastNumberAsInt;
+    sumTotal += processRow(row);
   }
 
   console.log(sumTotal);
+}
+
+try {
+  main();
 } catch (error) {
   console.error("Error occurred", error);
 }
