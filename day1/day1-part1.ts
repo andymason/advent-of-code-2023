@@ -27,7 +27,7 @@ function processRow(row: string): number {
 function main(): void {
   const filePath = join("day1", "day1-data.txt");
   const fileData = Deno.readTextFileSync(filePath);
-  const dataRows = fileData.split(/\n|\r/);
+  const dataRows = fileData.split(/\r?\n/);
 
   let sumTotal = 0;
 
