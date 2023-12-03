@@ -1,10 +1,5 @@
 import { readFile } from "/utils/readfile.ts";
-
-function getNumberAsInteger(inputNumber: string): number {
-  const numberAsInt: number = parseInt(inputNumber, 10);
-
-  return Number.isNaN(numberAsInt) ? 0 : numberAsInt;
-}
+import { getNumberAsInteger } from "/utils/parsing-data.ts";
 
 function processRow(row: string): number {
   const cleanedRowData = row.trim();
