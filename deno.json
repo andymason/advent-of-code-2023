@@ -1,5 +1,12 @@
 {
+    "compilerOptions": {
+        "strict": true
+    },
     "fmt": {
         "lineWidth": 120
+    },
+    "imports": {
+        "/": "./",
+        "./": "./"
     }
 }

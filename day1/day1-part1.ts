@@ -1,4 +1,4 @@
-import { join } from "https://deno.land/std@0.207.0/path/mod.ts";
+import { readFile } from "/utils/readfile.ts";
 
 function getNumberAsInteger(inputNumber: string): number {
   const numberAsInt: number = parseInt(inputNumber, 10);
@@ -24,10 +24,8 @@ function processRow(row: string): number {
   return (firstNumber * 10) + lastNumber;
 }
 
-function main(): void {
-  const filePath = join("day1", "day1-data.txt");
-  const fileData = Deno.readTextFileSync(filePath);
-  const dataRows = fileData.split(/\r?\n/);
+async function main(): Promise<void> {
+  const dataRows = await readFile(["day1", "day1-data.txt"]);
 
   let sumTotal = 0;
 
